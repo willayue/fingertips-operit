@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "toolpkg_id": "com.operit.willayue_fingertips",
+  "display_name": {"zh": "指尖语气 Fingertips", "en": "Fingertips"},
+  "version": "1.0.0",
+  "author": "[原作] eveacla11, [移植适配] willayue",
+  "description": {"zh": "让 AI 感知你的输入时长和欲言又止，随用户消息注入Fingertips 显性附件。只记节奏，永不记内容。", "en": "Let AI sense typing duration and hesitation without reading or storing input content."},
+  "main": "main.js",
+  "enabled_by_default": true,
+  "subpackages": [{"id": "finger_tips", "entry": "packages/finger_tips.js", "enabled_by_default": true, "display_name": {"zh": "指尖语气 Fingertips", "en": "Fingertips"}, "description": {"zh": "查看输入节奏状态、隐私配置并清理本地 Fingertips 记录。不会读取输入框原文。", "en": "View rhythm status and clear local records. Input text is never read."}}]
+}
