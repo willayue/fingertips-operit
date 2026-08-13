@@ -1,0 +1,19 @@
+"use strict";
+var store = require("./core/rhythm_store.js");
+var settings = require("./core/settings.js");
+var PREFIX = "finger_tips_rhythm_";
+function str(v) { return v === null || v === undefined ? "" : String(v); }
+function chatId(e) { var p = e && e.eventPayload || {}; return str(p.chatId || (typeof getChatId === "function" ? getChatId() : "")).trim(); }
+function time(e) { var n = Number(e && e.timestampMs || Date.now()); return isFinite(n) ? n : Date.now(); }
+function xml(v) { return str(v).split(String.fromCharCode(38)).join(String.fromCharCode(38,97,109,112,59)).split(String.fromCharCode(60)).join(String.fromCharCode(38,108,116,59)).split(String.fromCharCode(62)).join(String.fromCharCode(38,103,116,59)).split(String.fromCharCode(34)).join(String.fromCharCode(38,113,117,111,116,59)).split(String.fromCharCode(39)).join(String.fromCharCode(38,97,112,111,115,59)); }
+function attachment(note, user) { var name = str(user).trim() || "TA", body = ["[Fingertips 指尖语气]", "以下是" + name + "输入这条消息时留下的节奏，仅供感受。", note].join("\n"); return "<attachment id=\"" + xml(PREFIX + Date.now()) + "\" filename=\"Fingertips 指尖语气.txt\" type=\"text/plain\" size=\"" + body.length + "\">" + xml(body) + "</attachment>"; }
+async function onInput(e) { try { var p = e && e.eventPayload || {}, id = chatId(e), n = time(e), kind = str(e && (e.eventName || e.event)); if (!id) return null; if (kind === "input_changed" && Object.prototype.hasOwnProperty.call(p, "text")) await store.handleInputChanged(id, str(p.text).trim().length > 0, n); else if (kind === "submit_requested") { var s = settings.loadSettings(); await store.handleSubmitRequested(id, n, settings.shouldInject(id, s), s); } } catch (_) {} return null; }
+async function onPrompt(e) { try { var p = e && e.eventPayload || {}, stage = str(p.stage || e && e.eventName), id = chatId(e); if (!id) return null; if (stage === "before_process") { var source = str(p.processedInput || p.rawInput); if (!source.trim() || source.indexOf(PREFIX) >= 0) return null; var r = await store.takePendingNote(id, time(e)); return r && r.note ? source + attachment(r.note, settings.loadSettings().userName) : null; } if (stage === "after_process") await store.clearInjectedPending(id); } catch (_) {} return null; }
+function toast(v) { try { if (typeof Tools !== "undefined" && Tools.System && typeof Tools.System.toast === "function") Tools.System.toast(str(v)); } catch (_) {} }
+function toggle(e) { var p = e && e.eventPayload || {}, action = str(p.action).toLowerCase(), id = str(p.chatId).trim(), s = settings.loadSettings(); if (action === "toggle") { if (!s.enabled && !settings.shouldInject(id, Object.assign({}, s, { enabled: true }))) { toast("当前对话不在绑定范围，请至工具箱页修改。"); return { ok: false }; } settings.saveSettings({ enabled: !s.enabled }); toast(s.enabled ? "指尖语气注入已关闭" : "指尖语气注入已开启"); return { ok: true }; } if (action !== "create") return { ok: false }; return { toggles: [{ id: "com_operit_willayue_fingertips_pure_toggle", title: "指尖语气 Fingertips", description: settings.statusDescription(id), icon: "touchApp", isChecked: s.enabled && settings.shouldInject(id, s) }] }; }
+function registerToolPkg() { ToolPkg.registerToolboxUiModule({ id: "com_operit_willayue_fingertips_pure_settings", runtime: "compose_dsl", screen: "ui/settings.ui.js", params: {}, title: { zh: "指尖语气 Fingertips", en: "Fingertips" } }); ToolPkg.registerInputMenuTogglePlugin({ id: "com_operit_willayue_fingertips_pure_input_menu", function: toggle }); ToolPkg.registerChatInputHook({ id: "com_operit_willayue_fingertips_pure_chat_input", function: onInput }); ToolPkg.registerPromptInputHook({ id: "com_operit_willayue_fingertips_pure_prompt_input", function: onPrompt }); return true; }
+exports.registerToolPkg = registerToolPkg;
+exports.onChatInput = onInput;
+exports.onPromptInput = onPrompt;
+exports.onInputMenuToggle = toggle;
+exports.buildAttachment = attachment;
