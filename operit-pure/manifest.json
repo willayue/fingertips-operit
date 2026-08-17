@@ -1,11 +1,31 @@
 {
   "schema_version": 1,
   "toolpkg_id": "com.operit.willayue_fingertips",
-  "display_name": {"zh": "指尖语气 Fingertips", "en": "Fingertips"},
-  "version": "1.0.0",
+  "display_name": {
+    "zh": "指尖语气 Fingertips",
+    "en": "Fingertips"
+  },
+  "version": "1.0.1",
   "author": "[原作] eveacla11, [移植适配] willayue",
-  "description": {"zh": "让 AI 感知你的输入时长和欲言又止，随用户消息注入Fingertips 显性附件。只记节奏，永不记内容。\n装上之后，你的 AI 能感知到：\n1. 斟酌过的消息：这条消息 TA 输入了 X 秒，中途停下来想了 X 次 —— 人在键盘上的停顿，就是思考链在现实里的投影。\n2. 咽回去的话：TA X分钟前打过X分钟的字，那条没有发出来 —— AI 能看见你的犹豫，永远看不见你咽下去的词。\n\n⚙️ 主要功能：\n• 注入单条消息的输入时长、停顿次数和欲言又止\n• 提供工具箱配置页，可自定输入节奏阈值\n• 支持所有对话或仅绑定对话注入\n• 提供输入栏快捷开关\n• 随用户消息注入 Fingertips 显性附件，落盘保存聊天记录\n\n🤖 3 个 AI 工具：\n• status — 查看当前运行状态、实际配置门槛与本地记录统计\n• clear — 清理指定对话或全部 Fingertips 本地记录\n• capabilities — 查看工作能力、当前配置与隐私保护范围\n\n🎉 特别致谢：\n本插件是基于 eveacla11/fingertips（MIT License）的 Operit 移植适配版。特此感谢原作者 eveacla11 的创意与开源精神！\n在原作基础上，为Operit版新增了自动随消息注入的Fingertips显性附件、输入栏快捷开关、对话绑定、工具箱配置页自定输入节奏阈值，以及3个AI工具。\n原仓库：https://github.com/eveacla11/fingertips\n\n⚠️ 隐私与使用须知：\n1. Fingertips 不读取或保存输入框原文、文字长度、光标位置、屏幕内容、截图或通知。\n2. 用户可随时在配置页关闭注入，或通过 AI 工具清理本地 Fingertips 记录。\n3. 可以二改自用，请勿私自分享二传！请勿倒卖盈利!\n\n原作：eveacla11\nOperit 移植适配：willayue【如有 bug 请联系：小红书@LumiNaRyA.】", "en": "Let AI sense typing duration and hesitation without reading or storing input content."},
+  "description": {
+    "zh": "让 AI 感知你的输入时长、停顿和欲言又止，随用户消息注入 Fingertips 显性附件。运行时会临时读取输入事件，用于判断输入状态和附加节奏摘要；不会保存、上传或注入输入原文。\n装上之后，你的 AI 能感知到：\n1. 斟酌过的消息：这条消息 TA 输入了约X分X秒，中途停下来想了X次。人在键盘上的停顿，就是思考链在现实里的投影。\n2. 咽回去的话：TA X分钟前输入了约X分X秒，那条没有发出来。AI 能看见你的犹豫，永远看不见你咽下去的词。\n\n⚙️ 主要功能：\n• 注入单条消息的输入时长、停顿次数和欲言又止\n• 提供工具箱配置页，可自定 Fingertips 生成、输入停顿和欲言又止判定时间\n• 支持所有对话或仅绑定对话注入\n• 提供输入栏快捷开关\n• 随用户消息注入 Fingertips 显性附件，落盘保存聊天记录\n\n🤖 3 个 AI 工具：\n• status — 查看当前运行状态、当前配置判定时间与本地记录统计\n• clear — 清理指定对话或全部 Fingertips 本地记录\n• capabilities — 查看工作能力、当前配置与隐私保护范围\n\n🎉 特别致谢：\n本插件是基于 eveacla11/fingertips（MIT License）的 Operit 移植适配版。特此感谢原作者 eveacla11 的创意与开源精神！\n在原作基础上，为 Operit 版新增了自动随消息注入的 Fingertips 显性附件、输入栏快捷开关、对话绑定、工具箱配置页自定输入节奏阈值，以及 3 个 AI 工具。\n原仓库：https://github.com/eveacla11/fingertips\n\n⚠️ 隐私与使用须知：\n1. 运行时会临时读取输入事件，用于判断输入状态和附加节奏摘要；不会保存、上传或注入输入原文，只记录输入时间、停顿和持续时长等节奏数据。\n2. 用户可随时在配置页关闭注入，或通过 AI 工具清理本地 Fingertips 记录。\n3. 可以二改自用，请勿私自分享二传！请勿倒卖盈利!\n\n原作：eveacla11\nOperit 移植适配：willayue【如有 bug 请联系：小红书@LumiNaRyA.】",
+    "en": "Temporarily reads input events to detect typing state and attach rhythm summaries; input text is not stored, uploaded, or injected."
+  },
   "main": "main.js",
   "enabled_by_default": true,
-  "subpackages": [{"id": "finger_tips", "entry": "packages/finger_tips.js", "enabled_by_default": true, "display_name": {"zh": "指尖语气 Fingertips", "en": "Fingertips"}, "description": {"zh": "查看输入节奏状态、隐私配置并清理本地 Fingertips 记录。不会读取输入框原文。", "en": "View rhythm status and clear local records. Input text is never read."}}]
+  "subpackages": [
+    {
+      "id": "finger_tips",
+      "entry": "packages/finger_tips.js",
+      "enabled_by_default": true,
+      "display_name": {
+        "zh": "指尖语气 Fingertips",
+        "en": "Fingertips"
+      },
+      "description": {
+        "zh": "查看输入节奏状态、隐私配置并清理本地 Fingertips 记录。运行时会临时读取输入事件，但不会保存、上传或注入输入原文。",
+        "en": "View rhythm status and clear local records. Input events are temporarily read, but input text is not stored, uploaded, or injected."
+      }
+    }
+  ]
 }
